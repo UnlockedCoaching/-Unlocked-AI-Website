@@ -6,6 +6,8 @@
   <title>Unlocked Coaching — Private 1:1 Personal Training | Newton Mearns, Glasgow</title>
   <meta name="description" content="Private 1:1 personal training in Newton Mearns, Glasgow. No crowds. Custom programme and nutrition included. Book your free consultation with Paul today.">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('aGawJ43gMMdelYglW');</script>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600&family=Barlow:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
 
   <style>
@@ -1381,11 +1383,29 @@
     function handleSubmit(e) {
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
-      btn.innerHTML = 'Message Sent ✓';
-      btn.style.background = '#1a6e3e';
-      btn.style.boxShadow = '0 4px 22px rgba(26,110,62,0.4)';
+      btn.innerHTML = 'Sending...';
       btn.disabled = true;
-      btn.style.cursor = 'default';
+
+      const params = {
+        name:    document.getElementById('name').value,
+        email:   document.getElementById('email').value,
+        goal:    document.getElementById('goal').value,
+        message: document.getElementById('message').value,
+      };
+
+      emailjs.send('service_ww89a41', 'template_mfuq5yc', params)
+        .then(() => {
+          btn.innerHTML = 'Message Sent ✓';
+          btn.style.background = '#1a6e3e';
+          btn.style.boxShadow = '0 4px 22px rgba(26,110,62,0.4)';
+          btn.style.cursor = 'default';
+          document.getElementById('contactForm').reset();
+        })
+        .catch(() => {
+          btn.innerHTML = 'Something went wrong — try again';
+          btn.style.background = '#8e2c2c';
+          btn.disabled = false;
+        });
     }
 
     // Stat counters — animate when scrolled into view
