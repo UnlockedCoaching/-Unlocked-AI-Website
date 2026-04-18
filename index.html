@@ -1308,6 +1308,11 @@
             </div>
 
             <div class="field">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" class="field-input" placeholder="e.g. 07700 900000">
+            </div>
+
+            <div class="field">
               <label for="goal">Your Main Goal</label>
               <select id="goal" name="goal" class="field-input" required>
                 <option value="" disabled selected>Select your goal</option>
@@ -1389,6 +1394,7 @@
       const params = {
         name:    document.getElementById('name').value,
         email:   document.getElementById('email').value,
+        phone:   document.getElementById('phone').value,
         goal:    document.getElementById('goal').value,
         message: document.getElementById('message').value,
       };
