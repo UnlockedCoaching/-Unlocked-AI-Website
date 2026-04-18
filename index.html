@@ -450,46 +450,74 @@
     }
 
     /* ============================================
-       FLOATING SHAPES
+       LAMP + PATHS BACKGROUND
     ============================================ */
-    .shape-outer {
-      position: absolute;
-      transform: rotate(var(--rotate, 0deg));
-      animation: shapeIn 2.4s cubic-bezier(0.23, 0.86, 0.39, 0.96) var(--delay, 0s) both;
+    .lamp-wrap {
+      position: absolute; inset: 0;
+      overflow: hidden; pointer-events: none; z-index: 1;
     }
-
-    @keyframes shapeIn {
-      from { opacity: 0; transform: translateY(-150px) rotate(calc(var(--rotate, 0deg) - 15deg)); }
-      to   { opacity: 1; transform: translateY(0) rotate(var(--rotate, 0deg)); }
+    .lamp-beam-l {
+      position: absolute; top: 0; right: 50%;
+      width: 0; height: 58%;
+      background: conic-gradient(from 70deg at center top, rgba(44,103,142,0.9) 0%, rgba(44,103,142,0.25) 22%, transparent 40%);
+      opacity: 0;
+      animation: lampBeamIn 1.4s cubic-bezier(0.23,0.86,0.39,0.96) 0.4s forwards;
     }
-
-    .shape-inner {
-      animation: shapeFloat 12s ease-in-out var(--fdelay, 0s) infinite;
+    .lamp-beam-r {
+      position: absolute; top: 0; left: 50%;
+      width: 0; height: 58%;
+      background: conic-gradient(from 290deg at center top, transparent 60%, rgba(44,103,142,0.25) 78%, rgba(44,103,142,0.9) 100%);
+      opacity: 0;
+      animation: lampBeamIn 1.4s cubic-bezier(0.23,0.86,0.39,0.96) 0.4s forwards;
     }
-
-    @keyframes shapeFloat {
-      0%, 100% { transform: translateY(0); }
-      50%      { transform: translateY(15px); }
+    @keyframes lampBeamIn {
+      from { width: 12rem; opacity: 0; }
+      to   { width: 36rem; opacity: 0.3; }
     }
-
-    .shape-pill {
-      width: 100%;
-      height: 100%;
-      border-radius: 9999px;
-      background: linear-gradient(to right, var(--gcolor, rgba(44,103,142,0.15)), transparent);
-      backdrop-filter: blur(2px);
-      border: 2px solid rgba(255,255,255,0.12);
-      box-shadow: 0 8px 32px 0 rgba(255,255,255,0.05);
-      position: relative;
+    .lamp-glow {
+      position: absolute; top: 0; left: 50%;
+      transform: translateX(-50%) translateY(-20%);
+      width: 36rem; height: 9rem;
+      background: radial-gradient(ellipse, rgba(44,103,142,0.6) 0%, transparent 68%);
+      filter: blur(18px);
+      animation: glowPulse 3.5s ease-in-out infinite;
     }
-
-    .shape-pill::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 9999px;
-      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.14), transparent 70%);
+    @keyframes glowPulse { 0%,100%{opacity:.45} 50%{opacity:.75} }
+    .lamp-line {
+      position: absolute; top: 0; left: 50%;
+      height: 1px; opacity: 0;
+      background: linear-gradient(to right, transparent 0%, #2C678E 20%, rgba(170,176,254,0.9) 50%, #2C678E 80%, transparent 100%);
+      transform: translateX(-50%) translateY(-5rem);
+      animation: lineIn 1.4s cubic-bezier(0.23,0.86,0.39,0.96) 0.4s forwards;
     }
+    @keyframes lineIn {
+      from { width: 8rem; opacity: 0; }
+      to   { width: 36rem; opacity: 0.65; }
+    }
+    #hero-bg-paths {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 1;
+      opacity: 0;
+      animation: pathsFadeIn 2.5s ease-out 0.8s forwards;
+    }
+    @keyframes pathsFadeIn { to { opacity: 1; } }
+    @keyframes pathFlow {
+      from { stroke-dashoffset: 3000; }
+      to   { stroke-dashoffset: -3000; }
+    }
+    .hero-gym-label {
+      position: absolute; left: 2.2%; top: 50%;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: center;
+      white-space: nowrap;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600; font-size: 0.78rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(44,103,142,0.42);
+      pointer-events: none; z-index: 2;
+    }
+    @media (max-width: 900px) { .hero-gym-label { display: none; } }
 
     /* ============================================
        HERO TEXT ANIMATIONS
@@ -524,6 +552,7 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
+
   </style>
 </head>
 <body>
@@ -569,36 +598,9 @@
     <div class="hero-gradient"></div>
     <div class="noise-overlay"></div>
 
-    <!-- Floating geometric shapes (brand-coloured) -->
-    <div class="shape-outer" style="--rotate:12deg;--delay:0.3s;left:-5%;top:20%;">
-      <div class="shape-inner" style="width:600px;height:140px;--fdelay:2.7s;">
-        <div class="shape-pill" style="--gcolor:rgba(44,103,142,0.18);"></div>
-      </div>
-    </div>
+    <!-- Subtle left-side label -->
+    <div class="hero-gym-label">A Gym Built For You</div>
 
-    <div class="shape-outer" style="--rotate:-15deg;--delay:0.5s;right:0%;top:72%;">
-      <div class="shape-inner" style="width:500px;height:120px;--fdelay:2.9s;">
-        <div class="shape-pill" style="--gcolor:rgba(170,176,254,0.14);"></div>
-      </div>
-    </div>
-
-    <div class="shape-outer" style="--rotate:-8deg;--delay:0.4s;left:10%;bottom:10%;">
-      <div class="shape-inner" style="width:300px;height:80px;--fdelay:2.8s;">
-        <div class="shape-pill" style="--gcolor:rgba(44,103,142,0.13);"></div>
-      </div>
-    </div>
-
-    <div class="shape-outer" style="--rotate:20deg;--delay:0.6s;right:20%;top:12%;">
-      <div class="shape-inner" style="width:200px;height:60px;--fdelay:3.0s;">
-        <div class="shape-pill" style="--gcolor:rgba(208,224,248,0.1);"></div>
-      </div>
-    </div>
-
-    <div class="shape-outer" style="--rotate:-25deg;--delay:0.7s;left:25%;top:8%;">
-      <div class="shape-inner" style="width:150px;height:40px;--fdelay:3.1s;">
-        <div class="shape-pill" style="--gcolor:rgba(170,176,254,0.1);"></div>
-      </div>
-    </div>
 
     <!-- Hero content — centred -->
     <div style="position:relative;z-index:2;width:100%;max-width:800px;margin:0 auto;text-align:center;padding:0 1.5rem;">
@@ -1383,6 +1385,27 @@
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 60);
     }, { passive: true });
+
+    // Hero background paths
+    (function () {
+      const svg = document.getElementById('hero-bg-paths');
+      if (!svg) return;
+      const NS = 'http://www.w3.org/2000/svg';
+      [1, -1].forEach(function (pos) {
+        for (let i = 0; i < 28; i++) {
+          const p = document.createElementNS(NS, 'path');
+          const d = `M-${380 - i * 5 * pos} -${189 + i * 6}C-${380 - i * 5 * pos} -${189 + i * 6} -${312 - i * 5 * pos} ${216 - i * 6} ${152 - i * 5 * pos} ${343 - i * 6}C${616 - i * 5 * pos} ${470 - i * 6} ${684 - i * 5 * pos} ${875 - i * 6} ${684 - i * 5 * pos} ${875 - i * 6}`;
+          p.setAttribute('d', d);
+          p.setAttribute('stroke', '#2C678E');
+          p.setAttribute('stroke-width', String(0.4 + i * 0.022));
+          p.setAttribute('fill', 'none');
+          p.setAttribute('stroke-opacity', String(Math.min(0.38, 0.04 + i * 0.013)));
+          p.style.strokeDasharray = '400 2600';
+          p.style.animation = `pathFlow ${22 + i * 0.8}s linear ${i * 0.22 + (pos === -1 ? 3 : 0)}s infinite`;
+          svg.appendChild(p);
+        }
+      });
+    })();
 
     // Form submission
     function handleSubmit(e) {
